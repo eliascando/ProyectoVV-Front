@@ -1,0 +1,38 @@
+<mat-card>
+    <mat-card-title>Iniciar Sesión</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>Identificación</mat-label>
+            <input type="text" matInput formControlName="numberIdentification">
+            <mat-error *ngIf="form.controls['numberIdentification'].hasError('required')">
+              La identificación es obligatoria
+            </mat-error>
+            <mat-error *ngIf="form.controls['numberIdentification'].hasError('pattern')">
+              La identificación debe ser un número
+            </mat-error>
+          </mat-form-field>
+        </p>
+  
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>Contraseña</mat-label>
+            <input type="password" matInput formControlName="password">
+            <mat-error *ngIf="form.controls['password'].hasError('required')">
+              La contraseña es obligatoria
+            </mat-error>
+          </mat-form-field>
+        </p>
+  
+        <p *ngIf="error" class="error">
+          {{ error }}
+        </p>
+  
+        <div class="button">
+          <button type="submit" mat-button color="primary">Login</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  

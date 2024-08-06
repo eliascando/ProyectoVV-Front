@@ -1,0 +1,13 @@
+.entity-table .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.entity-table .header .spacer {
+    flex: 1;
+}
+
+.entity-table .p-datatable .p-datatable-tbody > tr > td {
+    vertical-align: middle;
+}

@@ -1,0 +1,98 @@
+<div class="entity-table">
+    <div class="header">
+        <button pButton type="button" label="Agregar" icon="pi pi-plus" (click)="openNew()"></button>
+    </div>
+
+    <p-table [value]="items" [paginator]="true" [rows]="10" [globalFilterFields]="['name', 'parallel']">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="name">Nombre</th>
+                <th pSortableColumn="parallel">Paralelo</th>
+                <th pSortableColumn="cycle">Ciclo</th>
+                <th pSortableColumn="price">Precio</th>
+                <th pSortableColumn="hours">Horas</th>
+                <th pSortableColumn="studentsRegistered">Estudiantes</th>
+                <th>Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-curso>
+            <tr>
+                <td>{{curso.id}}</td>
+                <td>{{curso.name}}</td>
+                <td>{{curso.parallel}}</td>
+                <td>{{curso.cycle}}</td>
+                <td>{{curso.price}}</td>
+                <td>{{curso.hours}}</td>
+                <td>{{curso.studentsRegistered}}</td>
+                <td>
+                    <button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="editItem(curso)"></button>
+                    <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteItem(curso.id)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <!-- Dialogo para Nuevo Curso -->
+    <p-dialog header="Nuevo Curso" [(visible)]="newDialog" [style]="{width: '450px'}" [modal]="true" [closable]="false" [responsive]="true" [breakpoints]="{'960px': '75vw', '640px': '90vw'}" (onShow)="loadCycles()">
+        <form [formGroup]="formNew">
+            <div class="p-fluid">
+                <div class="p-field">
+                    <label for="name">Nombre</label>
+                    <input id="name" type="text" pInputText formControlName="description" required/>
+                </div>
+                <div class="p-field">
+                    <label for="parallel">Paralelo</label>
+                    <input id="parallel" type="text" pInputText formControlName="parallel" required/>
+                </div>
+                <div class="p-field">
+                    <label for="cycleId">Ciclo</label>
+                    <p-dropdown id="cycleId" [options]="ciclos" formControlName="cycleId"
+                      optionLabel="description" optionValue="id" placeholder="Seleccione un ciclo"></p-dropdown>
+                </div>
+                <div class="p-field">
+                    <label for="price">Precio</label>
+                    <input id="price" type="number" pInputText formControlName="price" required/>
+                </div>
+                <div class="p-field">
+                    <label for="hours">Horas</label>
+                    <input id="hours" type="number" pInputText formControlName="hours" required/>
+                </div>
+            </div>
+        </form>
+        <p-footer>
+            <button pButton type="button" label="Cancelar" icon="pi pi-times" (click)="hideNewDialog()"></button>
+            <button pButton 
+                    type="button" 
+                    label="Guardar" 
+                    icon="pi pi-check" 
+                    (click)="saveNew()" 
+                    [disabled]="!formNew.valid"
+            ></button>
+        </p-footer>
+    </p-dialog>
+
+    <!-- Dialogo para Editar Curso -->
+    <p-dialog header="Editar Curso" [(visible)]="editDialog" [style]="{width: '450px'}" [modal]="true" [closable]="false" [responsive]="true" [breakpoints]="{'960px': '75vw', '640px': '90vw'}">
+        <form [formGroup]="formEdit">
+            <div class="p-fluid">
+                <div class="p-field">
+                    <label for="description">Descripción</label>
+                    <input id="description" type="text" pInputText formControlName="description" required/>
+                </div>
+                <div class="p-field">
+                    <label for="price">Precio</label>
+                    <input id="price" type="number" pInputText formControlName="price" required/>
+                </div>
+                <div class="p-field">
+                    <label for="hours">Horas</label>
+                    <input id="hours" type="number" pInputText formControlName="hours" required/>
+                </div>
+            </div>
+        </form>
+        <p-footer>
+            <button pButton type="button" label="Cancelar" icon="pi pi-times" (click)="hideEditDialog()"></button>
+            <button pButton type="button" label="Guardar" icon="pi pi-check" (click)="saveEdit()"></button>
+        </p-footer>
+    </p-dialog>
+</div>

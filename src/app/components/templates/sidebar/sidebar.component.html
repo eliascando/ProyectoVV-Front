@@ -1,0 +1,17 @@
+<!-- sidebar.component.html -->
+<div class="sidebar">
+    <ul class="sidebar-menu">
+        <li class="sidebar-item" *ngFor="let m of menu">
+            <a routerLink={{m.path}}>
+                <i class={{m.icon}}></i>
+                <span>{{m.name}}</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a (click)="logout()">
+                <i class='pi pi-sign-out'></i>
+                <span>Salir</span>
+            </a>
+        </li>
+    </ul>
+</div>

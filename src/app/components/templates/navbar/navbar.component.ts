@@ -16,8 +16,10 @@ export class NavbarComponent {
 
   user: IUserData;
 
-  constructor(private authServ: AuthService){
-    this.user = authServ.getUser();
+  constructor(private authServ: AuthService){}
+
+  ngOnInit(){
+    this.user = this.authServ.getUser();
   }
 
   getActualPath(){

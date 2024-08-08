@@ -13,13 +13,15 @@ import { PrimengModule } from '../../../primeng.module';
   templateUrl: './base-crud.component.html',
   styleUrl: './base-crud.component.css'
 })
-export class BaseCrudComponent {
+export class BaseCrudComponent implements OnInit{
 
   // Endpoints
   endpoint_save : string;
   endpoint_delete : string;
   endpoint_get : string;
   endpoint_update: string;
+
+  id_edit: any;
 
   // Dialogs
   newDialog: boolean = false;
@@ -40,10 +42,15 @@ export class BaseCrudComponent {
 
   }
 
+  ngOnInit() {
+    this.loadEntities();
+  }
+
   loadEntities() {
     this.apiServ.get(this.endpoint_get).subscribe(
       res => {
         this.items = res.data;
+        console.log(this.items);
       },
       err => {
         console.log(err);
@@ -56,8 +63,10 @@ export class BaseCrudComponent {
   }
 
   editItem(item: any) {
-    console.log(item);
-    this.formEdit.setValue(item);
+    // set id to edit
+    this.id_edit = item.id;
+    // set values to form
+    this.formEdit.patchValue(item);
     this.editDialog = true;
   }
 
@@ -71,8 +80,8 @@ export class BaseCrudComponent {
       if (result.isConfirmed) {
         this.apiServ.delete(`${this.endpoint_delete}${id}`).subscribe(
           res => {
-            // this.ngOnInit();
             Swal.fire('Eliminado', 'Elimnado correctamente!', 'success');
+            this.ngOnInit();
           },
           err => {
             console.log(err);
@@ -83,7 +92,6 @@ export class BaseCrudComponent {
   }
 
   saveNew() {
-    console.log(this.formNew.value);
     if (this.formNew.invalid) {
       return;
     }
@@ -97,7 +105,7 @@ export class BaseCrudComponent {
         }
         this.newDialog = false;
         Swal.fire('Creado', 'Guardado exitosamente!', 'success');
-        // this.ngOnInit();
+        this.ngOnInit();
       },
       err => {
         console.log(err);
@@ -106,11 +114,11 @@ export class BaseCrudComponent {
   }
 
   saveEdit() {
-    console.log(this.formEdit.value);
-    if (this.formEdit.invalid) {
-      return;
-    }
-    this.apiServ.put(this.endpoint_update, this.formEdit.value).subscribe(
+    // if (this.formEdit.invalid) {
+    //   return;
+    // }
+    let url = `${this.endpoint_update}${this.id_edit}`;
+    this.apiServ.put(url, this.formEdit.value).subscribe(
       res => {
         if (!res.success) {
           this.editDialog = false;
@@ -119,7 +127,7 @@ export class BaseCrudComponent {
         }
         this.editDialog = false;
         Swal.fire('Actualizado', 'Actualizado correctamente', 'success');
-        // this.ngOnInit();
+        this.ngOnInit();
       },
       err => {
         console.log(err);

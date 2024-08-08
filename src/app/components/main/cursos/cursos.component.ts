@@ -38,8 +38,9 @@ export class CursosComponent extends BaseCrudComponent implements OnInit {
     this.endpoint_get = Global.API_GET_CURSOS;
     this.endpoint_save = Global.API_SAVE_CURSO;
     this.endpoint_delete = Global.API_DELETE_CURSO;
-    this.endpoint_get_ciclos = Global.API_GET_PARAMETER_BY_ID + '2';
     this.endpoint_update = Global.API_UPDATE_CURSO;
+
+    this.endpoint_get_ciclos = Global.API_GET_PARAMETER_BY_ID + '2';
     
     // Formulario de nuevo
     this.formNew = this.forms.group({
@@ -58,9 +59,8 @@ export class CursosComponent extends BaseCrudComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     this.loadEntities();
-    this.loadCycles();
   }
 
   loadCycles() {

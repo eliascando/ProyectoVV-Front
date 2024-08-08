@@ -8,15 +8,14 @@ import { ApiService } from '../../../services/api.service';
 import { Global } from '../../../global';
 
 @Component({
-  selector: 'app-docente',
+  selector: 'app-estudiante',
   standalone: true,
   imports: [PrimengModule, HttpClientModule, FormsModule, ReactiveFormsModule, CommonModule],
   providers: [ApiService],
-  templateUrl: './docente.component.html',
-  styleUrl: './docente.component.css'
+  templateUrl: './estudiante.component.html',
+  styleUrl: './estudiante.component.css'
 })
-export class DocenteComponent extends BaseCrudComponent implements OnInit{
-
+export class EstudianteComponent extends BaseCrudComponent implements OnInit {
   constructor(
     private api: ApiService,
     private forms: FormBuilder
@@ -24,8 +23,8 @@ export class DocenteComponent extends BaseCrudComponent implements OnInit{
     super(api, forms);
 
     // Endpoints
-    this.endpoint_get = Global.API_GET_DOCENTES;
-    this.endpoint_save = Global.API_SAVE_DOCENTE;
+    this.endpoint_get = Global.API_GET_ESTUDIANTES;
+    this.endpoint_save = Global.API_SAVE_ESTUDIANTE;
     this.endpoint_delete = Global.API_DELETE_USUARIO;
     this.endpoint_update = Global.API_UPDATE_USUARIO;
 
@@ -36,7 +35,7 @@ export class DocenteComponent extends BaseCrudComponent implements OnInit{
       lastName: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', Validators.required],
-      roleId: [1] // Docente
+      roleId: [2] // Estudiante
     });
 
     // Formulario de edición
@@ -45,12 +44,11 @@ export class DocenteComponent extends BaseCrudComponent implements OnInit{
       phone: [''],
       adress: [''],
       password: [''],
-      roleId: [1] // Docente
+      roleId: [2] // Estudiante
     });
   }
 
   override ngOnInit() {
     this.loadEntities();
   }
-
 }

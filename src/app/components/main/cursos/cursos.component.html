@@ -7,7 +7,7 @@
         <ng-template pTemplate="header">
             <tr>
                 <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
-                <th pSortableColumn="name">Nombre</th>
+                <th pSortableColumn="description">Nombre</th>
                 <th pSortableColumn="parallel">Paralelo</th>
                 <th pSortableColumn="cycle">Ciclo</th>
                 <th pSortableColumn="price">Precio</th>
@@ -19,7 +19,7 @@
         <ng-template pTemplate="body" let-curso>
             <tr>
                 <td>{{curso.id}}</td>
-                <td>{{curso.name}}</td>
+                <td>{{curso.description}}</td>
                 <td>{{curso.parallel}}</td>
                 <td>{{curso.cycle}}</td>
                 <td>{{curso.price}}</td>

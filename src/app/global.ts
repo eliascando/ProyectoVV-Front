@@ -11,12 +11,20 @@ export const Global = {
     API_GET_CURSOS: 'cursos',
     API_SAVE_CURSO: 'curso/registrar',
     API_DELETE_CURSO: 'curso/inactivar/',
-    API_UPDATE_CURSO: 'curso/actualizar',
+    API_UPDATE_CURSO: 'curso/actualizar/',
 
     // MATRICULAS
     API_GET_MATRICULAS: 'matricula/todos',
     API_SAVE_MATRICULA_DOCENTE: 'matricula/docente',
     API_SAVE_MATRICULA_ESTUDIANTE: 'matricula/estudiante',
+
+    // USUARIOS
+    API_GET_ESTUDIANTES: 'estudiantes',
+    API_SAVE_ESTUDIANTE: 'estudiante/registrar',
+    API_GET_DOCENTES: 'docentes',
+    API_SAVE_DOCENTE: 'docente/registrar',
+    API_UPDATE_USUARIO: 'usuario/actualizar/',
+    API_DELETE_USUARIO: 'usuario/inactivar/',
     
     // PARAMETROS
     API_GET_PARAMETER_BY_ID: 'parameter/',
@@ -53,11 +61,11 @@ export const Global = {
             name: 'Docentes',
             roles: ['ADM', 'SEC', 'DOC', 'EST']
         },
-        {
-            path: 'parametros',
-            icon: 'pi pi-cog',
-            name: 'Parametros',
-            roles: ['ADM', 'SEC', 'DOC', 'EST']
-        }
+        // {
+        //     path: 'parametros',
+        //     icon: 'pi pi-cog',
+        //     name: 'Parametros',
+        //     roles: ['ADM', 'SEC', 'DOC', 'EST']
+        // }
     ]
 }

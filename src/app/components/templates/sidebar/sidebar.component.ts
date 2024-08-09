@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
@@ -8,15 +8,17 @@ import { Sidebar } from 'primeng/sidebar';
 import { PrimeIcons } from 'primeng/api';
 import { Global } from '../../../global';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
+
 
 interface Menu {
   path: string;
   icon: string;
   name: string;
-  roles: any[]
+  active: boolean;
+  roles: any[];
 }
 
 @Component({
@@ -30,6 +32,7 @@ interface Menu {
     StyleClassModule, 
     CommonModule, 
     RouterLink, 
+    RouterModule,
     HttpClientModule
   ],
   providers: [AuthService],
@@ -37,16 +40,38 @@ interface Menu {
   styleUrl: './sidebar.component.css'
 })
 
-export class SidebarComponent {
 
-  menu : Menu[];
+export class SidebarComponent implements OnInit {
 
-  constructor(private authServ: AuthService){
+  menu: Menu[];
+
+  constructor(private authServ: AuthService, private router: Router){
     this.menu = Global.MENU;
   }
 
-  logout(){
+  ngOnInit() {
+    // Actualiza el menú activo basado en la ruta actual al iniciar
+    this.updateActiveMenu(this.router.url);
+
+    // Escucha cambios de navegación y actualiza el menú activo
+    this.router.events.subscribe(event=> {
+      if (event instanceof NavigationEnd) {
+        this.updateActiveMenu(event.urlAfterRedirects);
+      }
+    });
+  }
+
+  updateActiveMenu(url: string) {
+    this.menu.forEach(item => {
+      item.active = url.includes(item.path);
+    });
+  }
+
+  logout() {
     this.authServ.logout();
   }
 
+  changeMenu(m: Menu) {
+    this.router.navigate([m.path]);
+  }
 }

@@ -48,3 +48,9 @@
     align-items: center;
     width: 100%;
 }
+
+.active {
+    border-left: 3px solid #007bff;
+    background-color: #f4f4f4;
+    color: #007bff;
+}

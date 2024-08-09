@@ -23,7 +23,13 @@ export class NavbarComponent {
   }
 
   getActualPath(){
-    return Global.getActualPath().toUpperCase();
+    var path = window.location.pathname.substring(1);
+    let splitPath = path.split('/');
+    if (splitPath.length > 1){
+      return splitPath[1].toUpperCase();
+    } else {
+      return path.toUpperCase();
+    }
   }
 
 }

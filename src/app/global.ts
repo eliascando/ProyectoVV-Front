@@ -1,12 +1,7 @@
 export const Global = {
     api_url: 'https://localhost:7158/api/',
 
-    getActualPath: () => {
-        return window.location.pathname.split('/')[2];
-    },
-
     // endpoints
-
     // CURSOS
     API_GET_CURSOS: 'cursos',
     API_SAVE_CURSO: 'curso/registrar',
@@ -41,24 +36,28 @@ export const Global = {
             path: 'matriculas',
             icon: 'pi pi-id-card',
             name: 'Matriculas',
+            active: false,
             roles: ['ADM', 'SEC', 'DOC', 'EST']
         },
         {
             path:'cursos',
             icon: 'pi pi-book',
             name: 'Cursos',
+            active: false,
             roles: ['ADM', 'SEC', 'DOC', 'EST']
         },
         {
             path: 'estudiantes',
             icon: 'pi pi-user',
             name: 'Estudiantes',
+            active: false,
             roles: ['ADM', 'SEC', 'DOC', 'EST']
         },
         {
             path: 'docentes',
             icon: 'pi pi-users',
             name: 'Docentes',
+            active: false,
             roles: ['ADM', 'SEC', 'DOC', 'EST']
         },
         // {

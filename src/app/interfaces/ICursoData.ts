@@ -7,4 +7,5 @@ export interface ICursoData {
     hours: number;
     status: boolean;
     studentsRegistered: number;
+    label ?: string;
 }

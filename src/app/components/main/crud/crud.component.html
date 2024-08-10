@@ -1,1 +1,141 @@
-<p>crud works!</p>
+<div class="entity-table">
+    <!-- <div class="header">
+        <button pButton type="button" label="Agregar" icon="pi pi-plus" (click)="openNew()"></button>
+    </div> -->
+
+    <p-table [value]="items" [paginator]="true" [rows]="10" [globalFilterFields]="['name', 'parallel']">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="description">Nombre</th>
+                <th pSortableColumn="creationTime">Fecha Creación</th>
+                <th>Detalles</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-p>
+            <tr>
+                <td>{{p.id}}</td>
+                <td>{{p.description}}</td>
+                <td>{{p.creationTime | date: 'dd/MM/yyyy'}}</td>
+                <td>
+                    <!--detalles-->
+                    <button 
+                        pButton 
+                        type="button" 
+                        icon="pi pi-eye"
+                        class="p-button-rounded p-button-info"
+                        (click)="openDetails(p)"
+                        [style]="{'margin-right': '10px'}"
+                    ></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <!-- Dialogo para Nuevo Curso
+    <app-base-crud-dialog
+        [visible]="newDialog"
+        [header]="'Nuevo Curso'"
+        (confirm)="saveNew()"
+        (cancel)="hideNewDialog()"
+        [disableConfirm]="!formNew.valid"
+    >
+        <form [formGroup]="formNew">
+            <div class="p-fluid">
+                <div class="p-field">
+                    <label for="name">Nombre</label>
+                    <input id="name" type="text" pInputText formControlName="description" required/>
+                </div>
+                <div class="p-field">
+                    <label for="parallel">Paralelo</label>
+                    <input id="parallel" type="text" pInputText formControlName="parallel" required/>
+                </div>
+                <div class="p-field">
+                    <label for="price">Precio</label>
+                    <input id="price" type="number" pInputText formControlName="price" required/>
+                </div>
+                <div class="p-field">
+                    <label for="hours">Horas</label>
+                    <input id="hours" type="number" pInputText formControlName="hours" required/>
+                </div>
+            </div>
+        </form>
+    </app-base-crud-dialog> -->
+
+    <!--Dialogo para Detalles-->
+    <app-base-crud-dialog
+        [visible]="showDetails"
+        [header]="'Detalles: ' + this.nameParameter"
+        [showCancellButton]="false"
+        (confirm)="closeDetails()"
+        confirmLabel="Cerrar"
+    >
+        <p-table [value]="detalles">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Id</th>
+                    <th>Valor</th>
+                    <th>Nombre</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-d>
+                <tr>
+                    <td>{{d.id}}</td>
+                    <td>{{d.value}}</td>
+                    <td>{{d.description}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <!-- <div *ngFor="let d of detalles">
+            <div class="p-field">
+                <label for="id">Id</label>
+                <input id="id" type="text" pInputText value="{{d.id}}" readonly/>
+            </div>
+            <div class="p-field">
+                <label for="creationTime">Valor</label>
+                <input id="creationTime" type="text" pInputText value="{{d.value}}" readonly/>
+            </div>
+            <div class="p-field">
+                <label for="description">Nombre</label>
+                <input id="description" type="text" pInputText value="{{d.description}}" readonly/>
+            </div>
+        </div> -->
+        <!-- <form [formGroup]="formEdit">
+            <div class="p-fluid">
+                <div class="p-field">
+                    <label for="description">Nombre</label>
+                    <input id="description" type="text" pInputText formControlName="description" readonly/>
+                </div>
+                <div class="p-field">
+                    <label for="creationTime">Fecha Creación</label>
+                    <input id="creationTime" type="text" pInputText formControlName="creationTime" readonly/>
+                </div>
+            </div>
+        </form> -->
+    </app-base-crud-dialog>
+    <!-- Dialogo para Editar Curso -->
+    <app-base-crud-dialog
+        [visible]="editDialog"
+        [header]="'Editar Curso'"
+        (confirm)="saveEdit()"
+        (cancel)="hideEditDialog()"
+        confirmLabel="Actualizar"
+    >
+        <form [formGroup]="formEdit">
+            <div class="p-fluid">
+                <div class="p-field">
+                    <label for="description">Descripción</label>
+                    <input id="description" type="text" pInputText formControlName="description" required/>
+                </div>
+                <div class="p-field">
+                    <label for="price">Precio</label>
+                    <input id="price" type="number" pInputText formControlName="price" required/>
+                </div>
+                <div class="p-field">
+                    <label for="hours">Horas</label>
+                    <input id="hours" type="number" pInputText formControlName="hours" required/>
+                </div>
+            </div>
+        </form>
+    </app-base-crud-dialog>
+</div>

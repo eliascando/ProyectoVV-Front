@@ -2,28 +2,34 @@ import { Component, OnInit } from '@angular/core';
 import { BaseCrudComponent } from '../base-crud/base-crud.component';
 import { PrimengModule } from '../../../primeng.module';
 import { HttpClientModule } from '@angular/common/http';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../services/api.service';
 import { Global } from '../../../global';
-import { BaseCrudDialogComponent } from '../base-crud/base-crud-dialog.component';
+import { BaseCrudDialogComponent } from "../base-crud/base-crud-dialog.component";
+import { ISystemParameter } from '../../../interfaces/ISystemParameter';
+import { ISystemParameterDetails } from '../../../interfaces/ISystemParameterDetails';
 
 @Component({
-  selector: 'app-docente',
+  selector: 'app-usuario',
   standalone: true,
   imports: [
-    CommonModule,
+    CommonModule, 
     PrimengModule, 
-    FormsModule, 
-    ReactiveFormsModule, 
+    BaseCrudDialogComponent, 
+    BaseCrudComponent,
     HttpClientModule, 
-    BaseCrudDialogComponent
+    ReactiveFormsModule 
   ],
   providers: [ApiService],
-  templateUrl: './docente.component.html',
-  styleUrl: './docente.component.css'
+  templateUrl: './usuario.component.html',
+  styleUrl: './usuario.component.css'
 })
-export class DocenteComponent extends BaseCrudComponent implements OnInit{
+
+export class UsuarioComponent extends BaseCrudComponent implements OnInit{
+
+  endpoint_get_roles: string;
+  roles: ISystemParameterDetails[];
 
   constructor(
     private api: ApiService,
@@ -32,10 +38,12 @@ export class DocenteComponent extends BaseCrudComponent implements OnInit{
     super(api, forms);
 
     // Endpoints
-    this.endpoint_get = Global.API_GET_DOCENTES;
-    this.endpoint_save = Global.API_SAVE_DOCENTE;
+    this.endpoint_get = Global.API_GET_USUARIOS;
+    this.endpoint_save = Global.API_SAVE_USUARIO;
     this.endpoint_delete = Global.API_DELETE_USUARIO;
     this.endpoint_update = Global.API_UPDATE_USUARIO;
+
+    this.endpoint_get_roles = Global.API_GET_PARAMETER_BY_ID + '1';
 
     // Formulario de nuevo
     this.formNew = this.forms.group({
@@ -44,7 +52,7 @@ export class DocenteComponent extends BaseCrudComponent implements OnInit{
       lastName: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', Validators.required],
-      roleId: [1] // Docente
+      roleId: ['', Validators.required]
     });
 
     // Formulario de edición
@@ -53,7 +61,7 @@ export class DocenteComponent extends BaseCrudComponent implements OnInit{
       phone: [''],
       adress: [''],
       password: [''],
-      roleId: [1] // Docente
+      roleId: ['', Validators.required]
     });
   }
 
@@ -61,16 +69,16 @@ export class DocenteComponent extends BaseCrudComponent implements OnInit{
     this.loadEntities();
   }
 
-  override cleanFormEdit(): void {
-    this.formEdit.reset({
-      roleId: 1
-    })
+  
+  loadRoles() {
+    this.api.get(this.endpoint_get_roles).subscribe(
+      res => {
+        const systemParameter: ISystemParameter = res.data;
+        this.roles = systemParameter.details;
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
-
-  override cleanFormNew(): void {
-    this.formNew.reset({
-      roleId: 1
-    })
-  }
-
 }

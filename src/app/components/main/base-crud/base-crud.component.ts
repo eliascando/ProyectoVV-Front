@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ApiService } from '../../../services/api.service';
 import Swal from 'sweetalert2';
 import { HttpClientModule } from '@angular/common/http';
@@ -8,10 +8,9 @@ import { PrimengModule } from '../../../primeng.module';
 @Component({
   selector: 'app-base-crud',
   standalone: true,
-  imports: [PrimengModule, HttpClientModule, FormsModule, ReactiveFormsModule],
+  imports: [PrimengModule, HttpClientModule, ReactiveFormsModule],
   providers: [ApiService],
-  templateUrl: './base-crud.component.html',
-  styleUrl: './base-crud.component.css'
+  template: `<p>base-crud works!</p>`
 })
 export class BaseCrudComponent implements OnInit{
 
@@ -30,6 +29,7 @@ export class BaseCrudComponent implements OnInit{
   // Forms
   formNew: FormGroup;
   formEdit: FormGroup;
+  formEditValid: FormGroup;
   
   // Items
   items: [];
@@ -67,6 +67,7 @@ export class BaseCrudComponent implements OnInit{
     this.id_edit = item.id;
     // set values to form
     this.formEdit.patchValue(item);
+    this.formEditValid = this.formBuilder.group(this.formEdit.value);
     this.editDialog = true;
   }
 
@@ -75,7 +76,9 @@ export class BaseCrudComponent implements OnInit{
       title: '¿Estás seguro de que deseas eliminar?',
       showCancelButton: true,
       confirmButtonText: `Sí`,
-      cancelButtonText: `No`
+      confirmButtonColor: '#dc3545',
+      cancelButtonText: `No`,
+      cancelButtonColor: '#6c757d'
     }).then((result) => {
       if (result.isConfirmed) {
         this.apiServ.delete(`${this.endpoint_delete}${id}`).subscribe(
@@ -95,7 +98,6 @@ export class BaseCrudComponent implements OnInit{
     if (this.formNew.invalid) {
       return;
     }
-
     this.apiServ.post(this.endpoint_save, this.formNew.value).subscribe(
       res => {
         if (!res.success) {
@@ -105,6 +107,7 @@ export class BaseCrudComponent implements OnInit{
         }
         this.newDialog = false;
         Swal.fire('Creado', 'Guardado exitosamente!', 'success');
+        this.cleanFormNew();
         this.ngOnInit();
       },
       err => {
@@ -114,9 +117,13 @@ export class BaseCrudComponent implements OnInit{
   }
 
   saveEdit() {
-    // if (this.formEdit.invalid) {
-    //   return;
-    // }
+    if (this.compareFormValues(this.formEdit, this.formEditValid)){
+      this.editDialog = false;
+      Swal.fire('Aviso', 'No se han realizado cambios', 'warning');
+      this.cleanFormEdit();
+      return;
+    }
+
     let url = `${this.endpoint_update}${this.id_edit}`;
     this.apiServ.put(url, this.formEdit.value).subscribe(
       res => {
@@ -127,6 +134,7 @@ export class BaseCrudComponent implements OnInit{
         }
         this.editDialog = false;
         Swal.fire('Actualizado', 'Actualizado correctamente', 'success');
+        this.cleanFormEdit();
         this.ngOnInit();
       },
       err => {
@@ -137,11 +145,23 @@ export class BaseCrudComponent implements OnInit{
 
   hideNewDialog() {
     this.newDialog = false;
+    this.cleanFormNew();
+  }
+
+  cleanFormNew() {
     this.formNew.reset();
+  }
+
+  cleanFormEdit() {
+    this.formEdit.reset();
   }
 
   hideEditDialog() {
     this.editDialog = false;
-    this.formEdit.reset();
+    this.cleanFormEdit();
+  }
+
+  compareFormValues(form: FormGroup, formValid: FormGroup) {
+    return JSON.stringify(form.value) === JSON.stringify(formValid.value);
   }
 }

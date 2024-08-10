@@ -7,6 +7,10 @@ import { CursosComponent } from './components/main/cursos/cursos.component';
 import { MatriculaComponent } from './components/main/matricula/matricula.component';
 import { DocenteComponent } from './components/main/docente/docente.component';
 import { EstudianteComponent } from './components/main/estudiante/estudiante.component';
+import { NotfoundComponent } from './components/templates/notfound/notfound.component';
+import { UsuarioComponent } from './components/main/usuario/usuario.component';
+import { CalificacionComponent } from './components/main/calificacion/calificacion.component';
+import { CrudComponent } from './components/main/crud/crud.component';
 
 export const routes: Routes = [
     {
@@ -23,8 +27,20 @@ export const routes: Routes = [
                 component: CursosComponent
             },
             {
+                path: 'usuarios',
+                component: UsuarioComponent
+            },
+            {
                 path: 'matriculas',
                 component: MatriculaComponent
+            },
+            {
+                path: 'calificaciones',
+                component: CalificacionComponent
+            },
+            {
+                path: 'parametros',
+                component: CrudComponent
             },
             {
                 path: 'docentes',
@@ -35,5 +51,9 @@ export const routes: Routes = [
                 component: EstudianteComponent
             }
         ]
-    }
+    },
+    {
+        path: '**',
+        component: NotfoundComponent,
+    },
 ];

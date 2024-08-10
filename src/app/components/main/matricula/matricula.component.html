@@ -2,85 +2,127 @@
     <div class="header">
         <button pButton type="button" label="Agregar" icon="pi pi-plus" (click)="openNew()"></button>
     </div>
-
+    <br />
     <p-table [value]="items" [paginator]="true" [rows]="10" [globalFilterFields]="['name', 'parallel']">
         <ng-template pTemplate="header">
             <tr>
                 <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
-                <th pSortableColumn="courseId">Curso ID</th>
-                <th pSortableColumn="userId">userId</th>
-                <th pSortableColumn="typeId">typeId</th>
-                <th pSortableColumn="creationTime">creationTime</th>
-                <th pSortableColumn="status">status</th>
+                <th pSortableColumn="typeName">Tipo</th>
+                <th pSortableColumn="userName">Nombres</th>
+                <th pSortableColumn="courseDescription">Curso</th>
+                <th pSortableColumn="cycle">Ciclo</th>
+                <th pSortableColumn="creationTime">Fecha Matrícula</th>
                 <th>Acciones</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-m>
             <tr>
                 <td>{{m.id}}</td>
-                <td>{{m.courseId}}</td>
-                <td>{{m.userId}}</td>
-                <td>{{m.typeId}}</td>
-                <td>{{m.creationTime}}</td>
-                <td>{{m.status}}</td>
+                <td>{{m.typeName}}</td>
+                <td>{{m.userName}}</td>
+                <td>{{m.courseDescription}}</td>
+                <td>{{m.cycle}}</td>
+                <td>{{m.creationTime | date: 'dd/MM/yyyy'}}</td>
                 <td>
-                    <!-- <button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="editItem(m)"></button> -->
-                    <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteItem(m.id)"></button>
+                    <button 
+                        pButton 
+                        type="button" 
+                        icon="pi pi-trash" 
+                        class="p-button-rounded p-button-danger" 
+                        (click)="deleteItem(m.id)"
+                    ></button>
                 </td>
             </tr>
         </ng-template>
     </p-table>
 
     <!-- Dialogo para Nueva Matricula -->
-    <p-dialog header="Nueva Matrícula" [(visible)]="newDialog" [style]="{width: '450px'}" [modal]="true" [closable]="false" [responsive]="true" [breakpoints]="{'960px': '75vw', '640px': '90vw'}" (onShow)="loadDropDowns()">
-
-        <!--seleccionar tipo de matricula-->
-        <div class="p-fluid">
-            <div class="p-field">
-                <label for="typeId">Tipo de Matricula</label>
-                <p-dropdown id="typeId" [options]="tiposMatricula" (onChange)="changeTipoMatricula($event)"
-                  optionLabel="description" optionValue="id" placeholder="Seleccione un tipo de matricula"></p-dropdown>
-            </div>
-        </div>
-
+    <app-base-crud-dialog
+        [visible]="newDialog"
+        [header]="'Nueva Matrícula'"
+        [onShowCallback]="loadDropDowns.bind(this)"
+        (confirm)="saveNew()"
+        (cancel)="hideNewDialog()"
+        [disableConfirm]="!formNew.valid"   
+    >
         <form [formGroup]="formNew">
+            <!--seleccionar tipo de matricula-->
+            <div class="p-fluid">
+                <div class="p-field">
+                    <label for="typeId">Tipo de Matricula</label>
+                    <p-dropdown 
+                        id="typeId" 
+                        [options]="tiposMatricula" 
+                        (onChange)="changeTipoMatricula($event)"
+                        optionLabel="description" 
+                        optionValue="id" 
+                        appendTo="body"
+                        placeholder="Seleccione un tipo de matricula"
+                    ></p-dropdown>
+                </div>
+            </div>
             <!--seleccionar curso-->
             <div class="p-fluid">
                 <div class="p-field">
                     <label for="courseId">Curso</label>
-                    <p-dropdown id="courseId" [options]="cursos" [disabled]="!enable_curso" formControlName="courseId"
-                    optionLabel="description" optionValue="id" placeholder="Seleccione un curso"></p-dropdown>
+                    <p-dropdown 
+                        id="courseId" 
+                        [options]="cursos" 
+                        formControlName="courseId"
+                        optionLabel="label" 
+                        optionValue="id" 
+                        [filter]="true"
+                        filterBy="label"
+                        [showClear]="true"
+                        appendTo="body"
+                        placeholder="Seleccione un curso"
+                        emptyMessage="No hay cursos registrados"
+                        emptyFilterMessage="No se encontraron resultados"
+                    ></p-dropdown>
                 </div>
             </div>
-
             <!--seleccionar estudiantes-->
             <div class="p-fluid" *ngIf="this.tipo_matricula == 10">
                 <div class="p-field">
                     <label for="userId">Elija Estudiante</label>
-                    <p-dropdown id="userId" [options]="estudiantes" formControlName="userId"
-                    optionLabel="name" optionValue="id" placeholder="Seleccione un estudiante"></p-dropdown>
+                    <p-dropdown 
+                        id="userId" 
+                        [options]="estudiantes" 
+                        formControlName="userId"
+                        optionLabel="name" 
+                        optionValue="id" 
+                        [filter]="true"
+                        filterBy="name"
+                        [showClear]="true"
+                        appendTo="body"
+                        placeholder="Seleccione un estudiante"
+                        emptyMessage="No hay estudiantes registrados"
+                        emptyFilterMessage="No se encontraron resultados"
+                    >
+                    </p-dropdown>
                 </div>
             </div>
-
             <!--seleccionar profesores-->
             <div class="p-fluid" *ngIf="this.tipo_matricula == 9">
                 <div class="p-field">
                     <label for="userId">Elija Docente</label>
-                    <p-dropdown id="userId" [options]="docentes" formControlName="userId"
-                    optionLabel="name" optionValue="id" placeholder="Seleccione un docente"></p-dropdown>
+                    <p-dropdown 
+                        id="userId" 
+                        [options]="docentes" 
+                        formControlName="userId"
+                        optionLabel="name" 
+                        optionValue="id" 
+                        [filter]="true"
+                        filterBy="name"
+                        [showClear]="true"
+                        appendTo="body"
+                        placeholder="Seleccione un docente"
+                        emptyMessage="No hay docentes registrados"
+                        emptyFilterMessage="No se encontraron resultados"
+                    >
+                    </p-dropdown>
                 </div>
             </div>
         </form>
-
-        <p-footer>
-            <button pButton type="button" label="Cancelar" icon="pi pi-times" (click)="hideNewDialog()"></button>
-            <button pButton 
-                    type="button" 
-                    label="Guardar" 
-                    icon="pi pi-check" 
-                    (click)="saveNew()" 
-                    [disabled]="!formNew.valid"
-            ></button>
-        </p-footer>
-    </p-dialog>
+    </app-base-crud-dialog>
 </div>

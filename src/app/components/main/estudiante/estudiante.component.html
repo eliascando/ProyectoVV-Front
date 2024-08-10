@@ -2,7 +2,7 @@
     <div class="header">
         <button pButton type="button" label="Agregar" icon="pi pi-plus" (click)="openNew()"></button>
     </div>
-
+    <br />
     <p-table [value]="items" [paginator]="true" [rows]="10" [globalFilterFields]="['name', 'parallel']">
         <ng-template pTemplate="header">
             <tr>
@@ -30,7 +30,13 @@
     </p-table>
 
     <!-- Dialogo para Nuevo Estudiante -->
-    <p-dialog header="Registrar Estudiante" [(visible)]="newDialog" [style]="{width: '450px'}" [modal]="true" [closable]="false" [responsive]="true" [breakpoints]="{'960px': '75vw', '640px': '90vw'}">
+    <app-base-crud-dialog
+        [visible]="newDialog"
+        [header]="'Nuevo Estudiante'"
+        (confirm)="saveNew()"
+        (cancel)="hideNewDialog()"
+        [disableConfirm]="!formNew.valid"
+    >
         <form [formGroup]="formNew">
             <div class="p-fluid">
                 <div class="p-field">
@@ -55,20 +61,16 @@
                 </div>
             </div>
         </form>
-        <p-footer>
-            <button pButton type="button" label="Cancelar" icon="pi pi-times" (click)="hideNewDialog()"></button>
-            <button pButton 
-                    type="button" 
-                    label="Guardar" 
-                    icon="pi pi-check" 
-                    (click)="saveNew()" 
-                    [disabled]="!formNew.valid"
-            ></button>
-        </p-footer>
-    </p-dialog>
+    </app-base-crud-dialog>
 
     <!-- Dialogo para Editar Estudiante --> 
-    <p-dialog header="Editar Estudiante" [(visible)]="editDialog" [style]="{width: '450px'}" [modal]="true" [closable]="false" [responsive]="true" [breakpoints]="{'960px': '75vw', '640px': '90vw'}">
+    <app-base-crud-dialog
+        [visible]="editDialog"
+        [header]="'Editar Estudiante'"
+        (confirm)="saveEdit()"
+        (cancel)="hideEditDialog()"
+        confirmLabel="Actualizar"
+    >
         <form [formGroup]="formEdit">
             <div class="p-fluid">
                 <div class="p-field">
@@ -89,9 +91,5 @@
                 </div>
             </div>
         </form>
-        <p-footer>
-            <button pButton type="button" label="Cancelar" icon="pi pi-times" (click)="hideEditDialog()"></button>
-            <button pButton type="button" label="Guardar" icon="pi pi-check" (click)="saveEdit()"></button>
-        </p-footer>
-    </p-dialog>
+    </app-base-crud-dialog>
 </div>

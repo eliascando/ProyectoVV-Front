@@ -8,9 +8,10 @@ import { SidebarModule } from 'primeng/sidebar';
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
-import { PrimeIcons } from 'primeng/api';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { CardModule } from 'primeng/card';
 
 @NgModule({
     declarations: [],
@@ -27,7 +28,9 @@ import { DropdownModule } from 'primeng/dropdown';
         DynamicDialogModule, 
         ToastModule, 
         ButtonModule,
-        DropdownModule
+        DropdownModule,
+        InputTextModule,
+        CardModule
     ],
     exports: [
         ToastModule, 
@@ -42,7 +45,10 @@ import { DropdownModule } from 'primeng/dropdown';
         DynamicDialogModule, 
         ToastModule, 
         ButtonModule,
-        DropdownModule
+        DropdownModule,
+        InputTextModule,
+        CardModule
     ],
 })
+
 export class PrimengModule { }

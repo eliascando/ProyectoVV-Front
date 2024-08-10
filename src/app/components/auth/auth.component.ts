@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http'; // Importa HttpClientModule
-import { MaterialModule } from '../../material.module';
+import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { ILogin } from '../../interfaces/ILogin';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { PrimengModule } from '../../primeng.module';
 
 @Component({
   selector: 'app-auth',
@@ -14,13 +14,13 @@ import { Router } from '@angular/router';
   imports: [
     CommonModule,
     FormsModule,
+    PrimengModule,
     ReactiveFormsModule,
-    HttpClientModule, // Importa HttpClientModule aquí
-    MaterialModule,
+    HttpClientModule
   ],
   providers: [AuthService],
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css'] // Asegúrate de que sea styleUrls
+  styleUrls: ['./auth.component.css']
 })
 export class AuthComponent {
 

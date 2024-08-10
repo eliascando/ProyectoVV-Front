@@ -40,20 +40,19 @@ interface Menu {
   styleUrl: './sidebar.component.css'
 })
 
-
 export class SidebarComponent implements OnInit {
 
   menu: Menu[];
 
   constructor(private authServ: AuthService, private router: Router){
-    this.menu = Global.MENU;
+    this.menu = Global.MENU.filter(
+      m => m.roles.includes(this.authServ.getUser().roleName)
+    );
   }
 
   ngOnInit() {
-    // Actualiza el menú activo basado en la ruta actual al iniciar
     this.updateActiveMenu(this.router.url);
 
-    // Escucha cambios de navegación y actualiza el menú activo
     this.router.events.subscribe(event=> {
       if (event instanceof NavigationEnd) {
         this.updateActiveMenu(event.urlAfterRedirects);

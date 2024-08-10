@@ -1,5 +1,5 @@
 <div class="entity-table">
-    <div class="header">
+    <div class="header" *ngIf="this.user.roleName!='DOC'">
         <button pButton type="button" label="Agregar" icon="pi pi-plus" (click)="openNew()"></button>
     </div>
 
@@ -10,10 +10,10 @@
                 <th pSortableColumn="description">Nombre</th>
                 <th pSortableColumn="parallel">Paralelo</th>
                 <th pSortableColumn="cycle">Ciclo</th>
-                <th pSortableColumn="price">Precio</th>
+                <th pSortableColumn="price" *ngIf="this.user.roleName!='DOC'">Precio</th>
                 <th pSortableColumn="hours">Horas</th>
                 <th pSortableColumn="studentsRegistered">Estudiantes</th>
-                <th>Acciones</th>
+                <th>{{this.user.roleName!='DOC' ? 'Acciones' : 'Detalles'}}</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-curso>
@@ -22,19 +22,50 @@
                 <td>{{curso.description}}</td>
                 <td>{{curso.parallel}}</td>
                 <td>{{curso.cycle}}</td>
-                <td>{{curso.price}}</td>
+                <td *ngIf="this.user.roleName!='DOC'">{{curso.price | currency}}</td>
                 <td>{{curso.hours}}</td>
                 <td>{{curso.studentsRegistered}}</td>
                 <td>
-                    <button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info" (click)="editItem(curso)"></button>
-                    <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteItem(curso.id)"></button>
+                    <button 
+                        *ngIf="this.user.roleName!='DOC'"
+                        pButton 
+                        type="button" 
+                        icon="pi pi-pencil" 
+                        class="p-button-rounded p-button-info"
+                        (click)="editItem(curso)"
+                        [style]="{'margin-right': '10px'}"
+                    ></button>
+                    <button 
+                        *ngIf="this.user.roleName!='DOC'"
+                        pButton 
+                        type="button" 
+                        icon="pi pi-trash" 
+                        class="p-button-rounded p-button-danger" 
+                        (click)="deleteItem(curso.id)"
+                    ></button>
+                    <button 
+                        *ngIf="this.user.roleName=='DOC'"
+                        pButton 
+                        type="button" 
+                        icon="pi pi-eye"
+                        class="p-button-rounded p-button-info"
+                        (click)="openDetails(curso)"
+                        [style]="{'margin-right': '10px'}"
+                ></button>
                 </td>
             </tr>
         </ng-template>
     </p-table>
 
     <!-- Dialogo para Nuevo Curso -->
-    <p-dialog header="Nuevo Curso" [(visible)]="newDialog" [style]="{width: '450px'}" [modal]="true" [closable]="false" [responsive]="true" [breakpoints]="{'960px': '75vw', '640px': '90vw'}" (onShow)="loadCycles()">
+    <app-base-crud-dialog
+        [visible]="newDialog"
+        [header]="'Nuevo Curso'"
+        [onShowCallback]="loadCycles.bind(this)"
+        (confirm)="saveNew()"
+        (cancel)="hideNewDialog()"
+        [disableConfirm]="!formNew.valid"
+    >
         <form [formGroup]="formNew">
             <div class="p-fluid">
                 <div class="p-field">
@@ -48,7 +79,7 @@
                 <div class="p-field">
                     <label for="cycleId">Ciclo</label>
                     <p-dropdown id="cycleId" [options]="ciclos" formControlName="cycleId"
-                      optionLabel="description" optionValue="id" placeholder="Seleccione un ciclo"></p-dropdown>
+                      optionLabel="description" optionValue="id" placeholder="Seleccione un ciclo" appendTo="body"></p-dropdown>
                 </div>
                 <div class="p-field">
                     <label for="price">Precio</label>
@@ -60,20 +91,17 @@
                 </div>
             </div>
         </form>
-        <p-footer>
-            <button pButton type="button" label="Cancelar" icon="pi pi-times" (click)="hideNewDialog()"></button>
-            <button pButton 
-                    type="button" 
-                    label="Guardar" 
-                    icon="pi pi-check" 
-                    (click)="saveNew()" 
-                    [disabled]="!formNew.valid"
-            ></button>
-        </p-footer>
-    </p-dialog>
+    </app-base-crud-dialog>
 
     <!-- Dialogo para Editar Curso -->
-    <p-dialog header="Editar Curso" [(visible)]="editDialog" [style]="{width: '450px'}" [modal]="true" [closable]="false" [responsive]="true" [breakpoints]="{'960px': '75vw', '640px': '90vw'}">
+    <app-base-crud-dialog
+        [visible]="editDialog"
+        [header]="'Editar Curso'"
+        [onShowCallback]="loadCycles.bind(this)"
+        (confirm)="saveEdit()"
+        (cancel)="hideEditDialog()"
+        confirmLabel="Actualizar"
+    >
         <form [formGroup]="formEdit">
             <div class="p-fluid">
                 <div class="p-field">
@@ -90,9 +118,35 @@
                 </div>
             </div>
         </form>
-        <p-footer>
-            <button pButton type="button" label="Cancelar" icon="pi pi-times" (click)="hideEditDialog()"></button>
-            <button pButton type="button" label="Guardar" icon="pi pi-check" (click)="saveEdit()"></button>
-        </p-footer>
-    </p-dialog>
+    </app-base-crud-dialog>
+
+        <!--Dialogo para Detalles-->
+        <app-base-crud-dialog
+        [visible]="showDetails"
+        [width]="'800px'"
+        [header]="'Estudiantes: ' + this.cursoName"
+        [showCancellButton]="false"
+        [onShowCallback]="loadStudents.bind(this)"
+        (confirm)="closeDetails()"
+        confirmLabel="Cerrar"
+    >
+        <p-table [value]="estudiantes">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre Completo</th>
+                    <th>Cédula</th>
+                    <th>Correo</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-e>
+                <tr>
+                    <td>{{e.id}}</td>
+                    <td>{{e.name + ' ' + e.lastName}}</td>
+                    <td>{{e.numberIdentification}}</td>
+                    <td>{{e.email}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </app-base-crud-dialog>
 </div>

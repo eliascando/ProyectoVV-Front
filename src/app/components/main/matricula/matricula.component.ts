@@ -1,27 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { PrimengModule } from '../../../primeng.module';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { ICursoData } from '../../../interfaces/ICursoData';
-import { INewCurso } from '../../../interfaces/INewCurso';
 import { ApiService } from '../../../services/api.service';
 import { HttpClientModule } from '@angular/common/http';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ISystemParameter } from '../../../interfaces/ISystemParameter';
 import { ISystemParameterDetails } from '../../../interfaces/ISystemParameterDetails';
-import { IEditCurso } from '../../../interfaces/IEditCurso';
-import Swal from 'sweetalert2';
 import { Global } from '../../../global';
 import { BaseCrudComponent } from '../base-crud/base-crud.component';
-import { IMatriculaData } from '../../../interfaces/IMatriculaData';
 import { INewUser } from '../../../interfaces/INewUser';
 import { CommonModule } from '@angular/common';
+import { BaseCrudDialogComponent } from '../base-crud/base-crud-dialog.component';
 
 @Component({
   selector: 'app-matricula',
   standalone: true,
-  imports: [PrimengModule, HttpClientModule, FormsModule, FormsModule, ReactiveFormsModule, CommonModule],
-  providers: [ConfirmationService, MessageService, ApiService, DialogService],
+  imports: [
+    PrimengModule, 
+    HttpClientModule, 
+    ReactiveFormsModule, 
+    CommonModule, 
+    BaseCrudDialogComponent
+  ],
+  providers: [ApiService],
   templateUrl: './matricula.component.html',
   styleUrl: './matricula.component.css'
 })
@@ -40,7 +41,6 @@ export class MatriculaComponent extends BaseCrudComponent implements OnInit {
   endpoint_get_cursos : string;
 
   tipo_matricula: number;
-  enable_curso: boolean = false;
 
   cursos: ICursoData[];
   estudiantes: INewUser[];
@@ -49,28 +49,30 @@ export class MatriculaComponent extends BaseCrudComponent implements OnInit {
   ciclos: ISystemParameterDetails[];
   tiposMatricula: ISystemParameterDetails[];
 
-  ref: DynamicDialogRef | undefined;
-
   constructor(
     private api: ApiService,
     private forms: FormBuilder
   ) {
+    // Constructor padre
     super(api, forms);
     // Init endpoints
     this.endpoint_get = Global.API_GET_MATRICULAS;
     this.endpoint_delete = Global.API_DELETE_CURSO;
     this.endpoint_update = Global.API_UPDATE_CURSO;
     this.enpoint_get_estudiantes = Global.API_GET_ESTUDIANTES;
+
     this.endpoint_get_docentes = Global.API_GET_DOCENTES;
     this.endpoint_get_cursos = Global.API_GET_CURSOS;
     
     this.endpoint_get_ciclos = Global.API_GET_PARAMETER_BY_ID + '2';
     this.endpoint_get_tipo_matricula = Global.API_GET_PARAMETER_BY_ID + '3';
+
     // Formulario de nuevo
     this.formNew = this.forms.group({
       courseId: ['', Validators.required],
       userId: ['', Validators.required]
     });
+    this.formNew.get('courseId')?.disable();
   }
 
   override ngOnInit() {
@@ -80,7 +82,7 @@ export class MatriculaComponent extends BaseCrudComponent implements OnInit {
   changeTipoMatricula(event: any) {
     console.log(event.value);
     this.tipo_matricula = event.value;
-    this.enable_curso = true;
+    this.formNew.get('courseId')?.enable();
     if (this.tipo_matricula == 9) {
       this.loadDocentes();
       this.endpoint_save = Global.API_SAVE_MATRICULA_DOCENTE;
@@ -98,7 +100,12 @@ export class MatriculaComponent extends BaseCrudComponent implements OnInit {
   loadCursos() {
     this.api.get(Global.API_GET_CURSOS).subscribe(
       res => {
-        this.cursos = res.data;
+        this.cursos = res.data.map((curso: any) => {
+          return {
+            ... curso,
+            label: curso.description + ' | ' + curso.parallel + ' | ' + curso.cycle,
+          }
+        });
       },
       err => {
         console.log(err);

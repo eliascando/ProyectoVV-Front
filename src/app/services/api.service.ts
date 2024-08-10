@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Global } from "../global";
 import { IApiResponse } from "../interfaces/IApiResponse";
 import { catchError, Observable, of } from "rxjs";
+import Swal from "sweetalert2";
 
 @Injectable()
 
@@ -78,7 +79,58 @@ export class ApiService {
 
     private handleError<T>(operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {
-            console.error(`${operation} failed: ${error.message}`);
+            console.error(`${operation} method failed: ${error.message}`);
+            console.error(error.status);
+            if (error.status == 403) {
+                Swal.fire(
+                    'Acceso denegado',
+                    `
+                    <p> No tienes permisos para realizar esta acción </p>
+                    <span style="font-size: 12px;">
+                        Por favor, 
+                        <a href="/help">contacta con soporte</a>
+                    </span>
+                    `,
+                    'error'
+                ).then((result) => {
+                    console.log(result);
+                    console.log('Acceso denegado');
+                });
+            }
+            if (error.status == 404)
+            {
+                Swal.fire(
+                    'Error',
+                    `
+                    <p> No se encontró el recurso solicitado </p>
+                    <span style="font-size: 12px;">
+                        Por favor, 
+                        <a href="/help">contacta con soporte</a>
+                    </span>
+                    `,
+                    'error'
+                ).then((result) => {
+                    console.log(result);
+                    console.log('Error');
+                });
+            }
+            // if (error.status == 401) {
+            //     Swal.fire(
+            //         'Sesión expirada',
+            //         `
+            //         <p> Tu sesión ha expirado </p>
+            //         <span style="font-size: 12px;">
+            //             Por favor, 
+            //             <a href="/login">inicia sesión</a>
+            //         </span>
+            //         `,
+            //         'error'
+            //     ).then(() => {
+            //         localStorage.removeItem('token');
+            //         localStorage.removeItem('user');
+            //         window.location.reload();
+            //     });
+            // }
             return of(result as T);
         };
     }

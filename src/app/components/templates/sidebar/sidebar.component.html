@@ -6,7 +6,7 @@
           <span>{{m.name}}</span>
         </a>
       </li>
-      <li class="sidebar-item">
+      <li class="sidebar-item" [style]="{'bottom': '0', 'cursor': 'pointer'}">
         <a (click)="logout()">
           <i class='pi pi-sign-out'></i>
           <span>Salir</span>

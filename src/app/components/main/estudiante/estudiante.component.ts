@@ -2,15 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { BaseCrudComponent } from '../base-crud/base-crud.component';
 import { PrimengModule } from '../../../primeng.module';
 import { HttpClientModule } from '@angular/common/http';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../services/api.service';
 import { Global } from '../../../global';
+import { BaseCrudDialogComponent } from "../base-crud/base-crud-dialog.component";
 
 @Component({
   selector: 'app-estudiante',
   standalone: true,
-  imports: [PrimengModule, HttpClientModule, FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    CommonModule, 
+    PrimengModule, 
+    BaseCrudDialogComponent, 
+    BaseCrudComponent,
+    HttpClientModule, 
+    ReactiveFormsModule 
+  ],
   providers: [ApiService],
   templateUrl: './estudiante.component.html',
   styleUrl: './estudiante.component.css'
@@ -50,5 +58,17 @@ export class EstudianteComponent extends BaseCrudComponent implements OnInit {
 
   override ngOnInit() {
     this.loadEntities();
+  }
+
+  override cleanFormEdit(): void {
+    this.formEdit.reset({
+      roleId: 2
+    })
+  }
+
+  override cleanFormNew(): void {
+    this.formNew.reset({
+      roleId: 2
+    })
   }
 }

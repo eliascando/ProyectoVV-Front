@@ -134,31 +134,9 @@ export class CalificacionDetalleComponent extends BaseCrudComponent implements O
 
         } else if (res.data == 2) {
           this.showFinalProcessButton = false;
-          // Swal.fire({
-          //   title: 'Calificaciones ya procesadas',
-          //   text: 'Las calificaciones ya han sido procesadas',
-          //   icon: 'warning',
-          //   confirmButtonText: 'Aceptar'
-          // });
         } else if (res.data == 1) {
           this.showFinalProcessButton = true;
-          // Swal.fire({
-          //   title: 'Calificaciones ya procesadas',
-          //   text: 'Las calificaciones ya han sido procesadas',
-          //   icon: 'warning',
-          //   confirmButtonText: 'Aceptar'
-          // });
         }
-        // this.showFinalProcessButton = true;
-
-        // } else {
-        //   Swal.fire({
-        //     title: 'Calificaciones ya procesadas',
-        //     text: 'Las calificaciones ya han sido procesadas',
-        //     icon: 'warning',
-        //     confirmButtonText: 'Aceptar'
-        //   });
-        // }
       },
       err => {
         console.log(err);
@@ -189,8 +167,6 @@ export class CalificacionDetalleComponent extends BaseCrudComponent implements O
   }
 
   saveCalificacion(): void {
-    // console.log(this.formCalificacion.value);
-
     let data = {
       idUsuario: this.id_estudiante,
       idCurso: this.id_curso,

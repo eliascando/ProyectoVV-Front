@@ -1,6 +1,6 @@
 export const Global = {
-    api_url: 'https://localhost:7158/api/',
-    // api_url: 'https://matriculasbackapi.azure-api.net/api/',
+    // api_url: 'https://localhost:7158/api/',
+    api_url: 'https://matriculasback20240810025243.azurewebsites.net/api/',
 
     // endpoints
     // CURSOS

@@ -43,8 +43,8 @@ export class MatriculaComponent extends BaseCrudComponent implements OnInit {
   tipo_matricula: number;
 
   cursos: ICursoData[];
-  estudiantes: INewUser[];
-  docentes: INewUser[];
+  estudiantes: any[];
+  docentes: any[];
 
   ciclos: ISystemParameterDetails[];
   tiposMatricula: ISystemParameterDetails[];
@@ -129,7 +129,12 @@ export class MatriculaComponent extends BaseCrudComponent implements OnInit {
   loadEstudiantes() {
     this.api.get(this.enpoint_get_estudiantes).subscribe(
       res => {
-        this.estudiantes = res.data;
+        this.estudiantes = res.data.map((estudiante: any) => {
+          return {
+            ... estudiante,
+            label: estudiante.name + ' ' + estudiante.lastName,
+          }
+        });
       },
       err => {
         console.log(err);
@@ -140,7 +145,13 @@ export class MatriculaComponent extends BaseCrudComponent implements OnInit {
   loadDocentes() {
     this.api.get(this.endpoint_get_docentes).subscribe(
       res => {
-        this.docentes = res.data;
+        this.docentes = res.data.map((docente: any) => {
+          return {
+            ... docente,
+            label: docente.name + ' ' + docente.lastName,
+          }
+        });
+        console.log(this.docentes);
       },
       err => {
         console.log(err);

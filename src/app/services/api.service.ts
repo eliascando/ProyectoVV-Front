@@ -38,7 +38,7 @@ export class ApiService {
         );
     }
 
-    public post(enpoint: string, data: any) : Observable<IApiResponse> {
+    public post(enpoint: string, data: any = {}) : Observable<IApiResponse> {
         return this.http.post<IApiResponse>(
             this.api_url + enpoint, data, this.getOptions()
         ).pipe(

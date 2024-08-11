@@ -1,0 +1,150 @@
+<div class="entity-table">
+    <div class="header">
+        <button pButton type="button" label="Volver" icon="pi pi-arrow-left" (click)="back()"></button>
+    </div>
+    <br />
+    <p-table [value]="items" [paginator]="showPaginator" [rows]="10">
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                {{cursoDescription}}
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Id</th>
+                <th>Estudiante</th>
+                <th>Cédula</th>
+                <th>Correo</th>
+                <th>Estado</th>
+                <th>Revisar</th> 
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-e>
+            <tr>
+                <td>{{e.id}}</td>
+                <td>{{e.name + ' ' + e.lastName}}</td>
+                <td>{{e.numberIdentification}}</td>
+                <td>{{e.email}}</td>
+                <td>{{e.statusMatricula}}</td>
+                <td>
+                    <button 
+                        *ngIf="showCalificacionesButton"
+                        pButton 
+                        type="button" 
+                        icon="pi pi-pencil"
+                        class="p-button-rounded p-button-info"
+                        [style]="{'margin-right': '10px'}"
+                        (click)="openCalificaciones(e)"
+                    ></button>
+                    <button 
+                        *ngIf="!showCalificacionesButton"
+                        pButton 
+                        type="button" 
+                        icon="pi pi-check" 
+                        class="p-button-rounded p-button-success" 
+                        (click)="closeCalificaciones()"
+                    ></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    
+    <p-table [value]="calificaciones" *ngIf="showCalificaciones">
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                Calificaciones
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Código</th>
+                <th>Descripción</th>
+                <th>Calificación</th>
+                <th>Estado</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-e>
+            <tr>
+                <td>{{e.id}}</td>
+                <td>{{e.gradeTypeName + '-' + e.gradePeriodName}}</td>
+                <td>{{e.grade}} / 10</td>
+                <td>{{getEstado(e.grade)}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <tr>
+                <td colspan="3"></td>
+                <td>
+                    <button 
+                        *ngIf="!showFinalProcessButton && showAddButton"
+                        pButton
+                        type="button"
+                        label="Añadir"
+                        icon="pi pi-plus"
+                        class="p-button-rounded p-button-success"
+                        (click)="openAddCalificacion()"
+                    ></button>
+                    <button 
+                        *ngIf="showFinalProcessButton"
+                        pButton
+                        type="button"
+                        label="Procesar Calificaciones"
+                        icon="pi pi-check"
+                        class="p-button-rounded p-button-success"
+                        (click)="procesarCalificaciones()"
+                    ></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <app-base-crud-dialog
+        [visible]="showAddCalificacion"
+        [header]="'Calificacion'"
+        [showCancellButton]="true"
+        (confirm)="saveCalificacion()"
+        (cancel)="closeAddCalificacion()"
+        confirmLabel="Guardar"
+    >
+        <form [formGroup]="formCalificacion">
+            <div class="p-fluid">
+                <div class="p-field">
+                    <label for="tipo">Tipo</label>
+                    <p-dropdown 
+                        id="tipo" 
+                        [options]="tipoCalificacion" 
+                        formControlName="tipoCalificacion"
+                        optionLabel="description" 
+                        optionValue="id" 
+                        appendTo="body"
+                        placeholder="Seleccione un tipo de calificación"
+                    ></p-dropdown>
+                </div>
+                <div class="p-field">
+                    <label for="periodo">Periodo</label>
+                    <p-dropdown 
+                        id="periodo" 
+                        [options]="periodoCalificacion" 
+                        formControlName="periodoCalificacion"
+                        optionLabel="description" 
+                        optionValue="id" 
+                        appendTo="body"
+                        placeholder="Seleccione un periodo"
+                    ></p-dropdown>
+                </div>
+                <div class="p-field">
+                    <label for="calificacion">Calificación</label>
+                    <input 
+                        pInputText 
+                        id="calificacion" 
+                        type="number" 
+                        formControlName="calificacion" 
+                        [min]="0"
+                        [max]="10"
+                        required
+                    />
+                </div>
+            </div>
+        </form>
+    </app-base-crud-dialog>
+</div>

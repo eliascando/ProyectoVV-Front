@@ -1,9 +1,11 @@
 export const Global = {
     api_url: 'https://localhost:7158/api/',
+    // api_url: 'https://matriculasbackapi.azure-api.net/api/',
 
     // endpoints
     // CURSOS
     API_GET_CURSOS: 'cursos',
+    API_GET_CURSO_BY_ID: 'curso/',
     API_GET_CURSOS_BY_DOCENTE_ID: 'cursos/docente/',
     API_SAVE_CURSO: 'curso/registrar',
     API_DELETE_CURSO: 'curso/inactivar/',
@@ -13,6 +15,12 @@ export const Global = {
     API_GET_MATRICULAS: 'matricula/todos',
     API_SAVE_MATRICULA_DOCENTE: 'matricula/docente',
     API_SAVE_MATRICULA_ESTUDIANTE: 'matricula/estudiante',
+
+    // CALIFICACIONES
+    API_SAVE_CALIFICACION: 'calificacion',
+    API_GET_CALIFICACIONES_BY_CURSO_ESTUDIANTE: 'calificacion/{idUser}/{idCurso}/',
+    API_PROCESAR_CALIFICACION_BY_MATRICULA: 'calificacion/procesar/{idMatricula}',
+    API_VALIDAR_PROCESAR_CALIFICACION: 'calificacion/activar/procesar/{idMatricula}',
 
     // USUARIOS
     API_GET_USUARIOS: 'usuario/todos',
@@ -28,6 +36,7 @@ export const Global = {
     // PARAMETROS
     API_GEL_ALL_PARAMETERS: 'parameter/todos',
     API_GET_PARAMETER_BY_ID: 'parameter/',
+    API_GET_CALIFICACION_DROPDOWNS_BY_STUDENT_AND_COURSE: 'calificacion/dropdowns/{idStudent}/{idCourse}',
 
     // MENU PRINCIPAL
     MENU: [
@@ -35,7 +44,8 @@ export const Global = {
         //     path:'dashboard',
         //     icon: 'pi pi-desktop',
         //     name: 'Dashboard',
-        //     roles: ['ADM', 'SEC']
+        //     active: false,
+        //     roles: ['ADM', 'SEC', 'EST', 'DOC']
         // },
         {
             path: 'matriculas',
@@ -63,21 +73,21 @@ export const Global = {
             icon: 'pi pi-user-edit',
             name: 'Estudiantes',
             active: false,
-            roles: ['ADM', 'SEC']
+            roles: ['SEC']
         },
         {
             path: 'docentes',
             icon: 'pi pi-briefcase',
             name: 'Docentes',
             active: false,
-            roles: ['ADM', 'SEC']
+            roles: ['SEC']
         },
         {
             path: 'calificaciones',
             icon: 'pi pi-chart-line',
             name: 'Calificaciones',
             active: false,
-            roles: ['ADM', 'DOC', 'EST']
+            roles: ['DOC', 'EST']
         },
         {
             path: 'parametros',
@@ -86,11 +96,5 @@ export const Global = {
             active: false,
             roles: ['ADM']
         }              
-        // {
-        //     path: 'parametros',
-        //     icon: 'pi pi-cog',
-        //     name: 'Parametros',
-        //     roles: ['ADM', 'SEC', 'DOC', 'EST']
-        // }
     ]
 }

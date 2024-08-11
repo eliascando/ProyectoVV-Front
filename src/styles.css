@@ -2,9 +2,3 @@
 @import "primeicons/primeicons.css";
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-@font-face {
-    font-family: 'InconsolataBlack';
-    src: url('/src/assets/fonts/inconsolata/Inconsolata-Black.ttf') format('truetype');
-}
-

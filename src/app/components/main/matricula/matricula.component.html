@@ -89,15 +89,16 @@
                         id="userId" 
                         [options]="estudiantes" 
                         formControlName="userId"
-                        optionLabel="name" 
+                        optionLabel="label" 
                         optionValue="id" 
                         [filter]="true"
-                        filterBy="name"
+                        [filterFields]="['label', 'numberIdentification']"
                         [showClear]="true"
                         appendTo="body"
                         placeholder="Seleccione un estudiante"
                         emptyMessage="No hay estudiantes registrados"
                         emptyFilterMessage="No se encontraron resultados"
+                        filterPlaceholder="Buscar por nombre o cédula"
                     >
                     </p-dropdown>
                 </div>
@@ -110,15 +111,16 @@
                         id="userId" 
                         [options]="docentes" 
                         formControlName="userId"
-                        optionLabel="name" 
+                        optionLabel="label" 
                         optionValue="id" 
                         [filter]="true"
-                        filterBy="name"
+                        [filterFields]="['label', 'numberIdentification']"
                         [showClear]="true"
                         appendTo="body"
                         placeholder="Seleccione un docente"
                         emptyMessage="No hay docentes registrados"
                         emptyFilterMessage="No se encontraron resultados"
+                        filterPlaceholder="Buscar por nombre o cédula"
                     >
                     </p-dropdown>
                 </div>

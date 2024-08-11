@@ -11,6 +11,8 @@ import { NotfoundComponent } from './components/templates/notfound/notfound.comp
 import { UsuarioComponent } from './components/main/usuario/usuario.component';
 import { CalificacionComponent } from './components/main/calificacion/calificacion.component';
 import { CrudComponent } from './components/main/crud/crud.component';
+import { CalificacionDetalleComponent } from './components/main/calificacion-detalle/calificacion-detalle.component';
+// import { DetalleEstudianteComponent } from './components/main/calificacion-detalle/detalle-estudiante/detalle-estudiante.component';
 
 export const routes: Routes = [
     {
@@ -37,6 +39,14 @@ export const routes: Routes = [
             {
                 path: 'calificaciones',
                 component: CalificacionComponent
+            },
+            {
+                path: 'calificaciones/:id',
+                component: CalificacionDetalleComponent,
+                // children: [{
+                //     path: 'estudiante/:studentId',
+                //     component: DetalleEstudianteComponent
+                // }]
             },
             {
                 path: 'parametros',

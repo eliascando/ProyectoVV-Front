@@ -3,6 +3,9 @@
         <h1 class="numberError">404</h1>
         <p>Ups! No encontramos lo que buscas</p>
         <p>La página que buscas no existe o ha sido eliminada</p>
-        <button class="btn" routerLink="/">Ir a inicio</button>
+        <button class="btn" *ngIf="hasHistory; else goToHome" (click)="volver()">Volver</button>
+        <ng-template #goToHome>
+            <button class="btn" (click)="irAInicio()">Ir a inicio</button>
+        </ng-template>
     </div>
 </div>

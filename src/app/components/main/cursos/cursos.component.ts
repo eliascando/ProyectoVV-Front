@@ -104,5 +104,6 @@ export class CursosComponent extends BaseCrudComponent implements OnInit {
 
   closeDetails() {
     this.showDetails = false;
+    this.estudiantes = [];
   }
 }

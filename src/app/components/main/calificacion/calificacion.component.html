@@ -1,1 +1,72 @@
-<p>calificacion works!</p>
+<div class="entity-table">
+    <div class="header" *ngIf="this.user.roleName!='DOC'">
+        <button pButton type="button" label="Agregar" icon="pi pi-plus" (click)="openNew()"></button>
+    </div>
+
+    <p-table [value]="items" [paginator]="true" [rows]="10" [globalFilterFields]="['name', 'parallel']">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="description">Nombre</th>
+                <th pSortableColumn="parallel">Paralelo</th>
+                <th pSortableColumn="cycle">Ciclo</th>
+                <th pSortableColumn="price" *ngIf="this.user.roleName!='DOC'">Precio</th>
+                <th pSortableColumn="hours">Horas</th>
+                <th pSortableColumn="studentsRegistered">Estudiantes</th>
+                <th>Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-curso>
+            <tr>
+                <td>{{curso.id}}</td>
+                <td>{{curso.description}}</td>
+                <td>{{curso.parallel}}</td>
+                <td>{{curso.cycle}}</td>
+                <td *ngIf="this.user.roleName!='DOC'">{{curso.price | currency}}</td>
+                <td>{{curso.hours}}</td>
+                <td>{{curso.studentsRegistered}}</td>
+                <td>
+                    <button 
+                        *ngIf="this.user.roleName=='DOC'"
+                        pButton 
+                        type="button" 
+                        icon="pi pi-pencil"
+                        class="p-button-rounded p-button-info"
+                        (click)="openDetails(curso)"
+                        [style]="{'margin-right': '10px'}"
+                ></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <!--Dialogo para Detalles-->
+    <app-base-crud-dialog
+        [visible]="showDetails"
+        [width]="'800px'"
+        [header]="'Estudiantes: ' + this.cursoName"
+        [showCancellButton]="false"
+        [onShowCallback]="loadStudents.bind(this)"
+        (confirm)="closeDetails()"
+        confirmLabel="Cerrar"
+    >
+        <p-table [value]="estudiantes">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre Completo</th>
+                    <th>Cédula</th>
+                    <th>Correo</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-e>
+                <tr>
+                    <td>{{e.id}}</td>
+                    <td>{{e.name + ' ' + e.lastName}}</td>
+                    <td>{{e.numberIdentification}}</td>
+                    <td>{{e.email}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </app-base-crud-dialog>
+</div>

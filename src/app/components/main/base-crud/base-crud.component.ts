@@ -32,7 +32,7 @@ export class BaseCrudComponent implements OnInit{
   formEditValid: FormGroup;
   
   // Items
-  items: [];
+  items: any[];
   item: any;
 
   constructor(
